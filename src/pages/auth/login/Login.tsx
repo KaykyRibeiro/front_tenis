@@ -1,8 +1,11 @@
 //import { useLinkClickHandler } from "react-router-dom";
 import Button from "../../../components/Buttons/button";
+import { useNavigate } from "react-router-dom"
 
 
 export default function Login() {
+ const navigate = useNavigate()
+
  return (
   
   <div>
@@ -26,10 +29,10 @@ export default function Login() {
     </div>
     <form action=""
     //onSubmit={}
-    className="bg-white flex flex-col justify-between items-center p-10 rounded-2xl">
+    className="bg-white flex flex-col justify-center items-center p-10 rounded-2xl">
       <div className="w-full flex flex-col">
         <div className="flex flex-col items-center mt-10">
-          <label htmlFor="" className="font-semibold items-start text-green-900">Insira seu Usuário ou Telefone</label>
+          <label htmlFor="" className="font-semibold text-lg items-start text-green-900">Insira seu Usuário ou Telefone</label>
           <input type="text"
           placeholder="Insira seu Usuário ou Telefone" 
           className="w-150 border-2 border-green-900 rounded-2xl p-3"/>
@@ -37,7 +40,7 @@ export default function Login() {
       
         <div className="mt-10">
           <div className="flex flex-col items-center">
-            <label htmlFor="" className="font-semibold text-green-900">Insira sua Senha</label>
+            <label htmlFor="" className="font-semibold text-lg text-green-900 ">Insira sua Senha</label>
             <input type="password"
             placeholder="Insira sua Senha" 
             className="w-150 border-2 border-green-900 rounded-2xl p-3"/>
@@ -51,16 +54,14 @@ export default function Login() {
       </div>
       <Button
             type="button"
-            //onClick={() => navigate("/Cadastro")}
+            onClick={() => navigate("/Cadastro")}
             children="Não possui uma conta? Cadastre-se agora!"
-            className="font-medium text-black-smooth hover:text-primary-orange mt-8  underline"
+            className="font-medium text-black-smooth mt-8 cursor-pointer"
           />
       <div className="mt-12">
-        <Button
-            children="ACESSAR"
-            className=" "
-            type="submit"
-          />
+        <button type="submit" onClick={() => navigate("/Home")} className="font-semibold rounded-xl text-white text-xl bg-green-900 py-3 px-6 hover:bg-green-600">
+          ACESSAR
+        </button>
       </div>     
     </form>
    </div>

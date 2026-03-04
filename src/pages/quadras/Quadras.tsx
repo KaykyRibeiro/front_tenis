@@ -1,10 +1,9 @@
 import Sidebar from '../../components/navigation/Sidebar';
 
-export default function Home() {
+export default function Quadras() {
     return (
         <div>
-            <Sidebar page="Home" />
-            <h1>Home</h1>
+            <Sidebar page="Quadras" />
         </div>
     );
 }

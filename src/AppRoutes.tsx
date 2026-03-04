@@ -3,8 +3,13 @@ import { Routes, Route } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 
-const Home = lazy(() => import("./pages/home/home"));
-const Login = lazy(() => import("./pages/auth/login/login"));
+const Home = lazy(() => import("./pages/home/Home"));
+const Dashboard = lazy(() => import("./pages/dashboards/Dashboard"));
+const Aulas = lazy(() => import("./pages/aulas/Aulas"));
+const Quadras = lazy(() => import("./pages/quadras/Quadras"));
+const Alunos = lazy(() => import("./pages/alunos/Alunos"));
+const Professores = lazy(() => import("./pages/professores/Professores"));
+const Login = lazy(() => import("./pages/auth/login/Login"));
 const Cadastro = lazy(() => import("./pages/auth/register/register"));
 const Cadastro2 = lazy(() => import("./pages/auth/register/register2"));
 const Cadastro3 = lazy(() => import("./pages/auth/register/register3"));
@@ -25,6 +30,11 @@ export default function AppRoutes() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/login" replace />} />
                     <Route path="/home" element={<Home />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/aulas" element={<Aulas />} />
+                    <Route path="/quadras" element={<Quadras />} />
+                    <Route path="/alunos" element={<Alunos />} />
+                    <Route path="/professores" element={<Professores />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/cadastro" element={<Cadastro />} />
                     <Route path="/cadastro2" element={<Cadastro2 />} />

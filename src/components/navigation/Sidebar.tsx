@@ -5,23 +5,29 @@ import { GraduationCap, House, IdCardLanyard, LayoutDashboard, NotebookTabs, Set
 
 type SidebarProps = {
     page: string;
+    tema?: "light" | "dark";
 }
-export default function Sidebar({ page }: SidebarProps) {
+export default function Sidebar({ page, tema }: SidebarProps) {
 
     const [isHovered, setIsHovered] = useState(false);
+
+
+    const logoSrc = tema === "light" ? "/public/logo/logo-p-branco.png" : "/public/logo/logo-p-preto.png";
+
+    
 
     return (
         <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className={clsx(
-                'absolute top-0 left-0 h-screen bg-gray-smooth transition-all duration-300 ease-in-out flex flex-col items-center justify-between gap-4 pt-8 py-2 shadow-2xl',
+                'absolute top-0 left-0 h-screen bg-gray-smooth  dark:bg-black-smooth transition-all duration-300 ease-in-out flex flex-col items-center justify-between gap-4 pt-8 py-2 shadow-2xl',
                 // hover foda para caralho 
                 isHovered ? "w-44 " : "w-16 "
             )}>
             <div>
                 <div className="flex justify-center items-center  w-auto rounded-2xl">
-                    <img src="/public/logo/logo-p-branco.png" alt="Logo" className={clsx(
+                    <img src={logoSrc} alt="Logo" className={clsx(
                         'transition-all duration-300 ease-in-out',
                         // hover foda para caralho 
                         isHovered ? "w-auto h-32 mb-4" : "w-auto h-12 mb-20"

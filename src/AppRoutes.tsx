@@ -4,6 +4,7 @@ import { Navigate } from "react-router-dom";
 
 
 const Home = lazy(() => import("./pages/home/Home"));
+const Profile = lazy(() => import("./pages/porfile/Profile"));
 const Dashboard = lazy(() => import("./pages/dashboards/Dashboard"));
 const Aulas = lazy(() => import("./pages/aulas/Aulas"));
 const Quadras = lazy(() => import("./pages/quadras/Quadras"));
@@ -30,6 +31,7 @@ export default function AppRoutes() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/login" replace />} />
                     <Route path="/home" element={<Home />} />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/aulas" element={<Aulas />} />
                     <Route path="/quadras" element={<Quadras />} />

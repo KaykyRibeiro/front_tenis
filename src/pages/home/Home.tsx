@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import clsx from 'clsx';
 
@@ -8,7 +8,9 @@ import TempDatCard from '../../components/cads/TempDatCard';
 import { Bell, Moon, Sun } from 'lucide-react';
 import TabsNewAlunos from '../../components/Tabs/TabsNewAlunos';
 import TabsAulasAgora from '../../components/Tabs/TabsAulasAgora';
+import { useDarkMode } from '../../hooks/useDarkMode';
 export default function Home() {
+    const isDarkMode = useDarkMode();
     const [theme, setTheme] = useState<"light" | "dark">("light");
 
     const toggleTheme = () => {
@@ -16,6 +18,12 @@ export default function Home() {
         setTheme(newTheme);
         document.documentElement.classList.toggle("dark", newTheme === "dark")
     }
+
+    const isDark = isDarkMode ? "dark" : "light";
+
+    useEffect(() => {
+        setTheme(isDark);
+    }, [isDark]);
     const novosAlunos = [
         {
             id: 1,
@@ -106,7 +114,7 @@ export default function Home() {
                 </div>
             </div>
 
-            <Sidebar page="Home" tema={theme} />
+            <Sidebar page="Home" />
         </div>
     );
 }

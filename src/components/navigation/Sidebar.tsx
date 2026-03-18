@@ -1,20 +1,28 @@
-import { useState } from 'react';
+import {  useEffect, useState } from 'react';
 import { clsx } from 'clsx';
 import BtnSidebar from '../Buttons/BtnSidebar';
 import { GraduationCap, House, IdCardLanyard, LayoutDashboard, NotebookTabs, Settings, SquareCenterlineDashedHorizontal } from "lucide-react";
 
+import { useDarkMode } from '../../hooks/useDarkMode';
+
 type SidebarProps = {
     page: string;
-    tema?: "light" | "dark";
+
 }
-export default function Sidebar({ page, tema }: SidebarProps) {
-
+export default function Sidebar({ page }: SidebarProps) {
+    const isDarkMode = useDarkMode();
     const [isHovered, setIsHovered] = useState(false);
+    const [theme, setTheme] = useState<"light" | "dark">("light");
+
+    const isDark = isDarkMode ? "dark" : "light";
+
+    useEffect(() => {
+        setTheme(isDark);
+    }, [isDark]);
 
 
-    const logoSrc = tema === "light" ? "/public/logo/logo-p-branco.png" : "/public/logo/logo-p-preto.png";
+    const logoSrc = theme === "light" ? "/public/logo/logo-p-branco.png" : "/public/logo/logo-p-preto.png";
 
-    
 
     return (
         <div

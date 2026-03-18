@@ -1,5 +1,5 @@
 //import { useLinkClickHandler } from "react-router-dom";
-import Button from "../../../components/Buttons/button";
+//import Button from "../../../components/Buttons/button";
 import { useNavigate } from "react-router-dom"
 
 
@@ -34,6 +34,7 @@ export default function Login() {
           >Esqueceu sua senha?</p>
 
 
+          {/*
           <div className="text-white">
             <Button
               type="button"
@@ -42,6 +43,8 @@ export default function Login() {
               className="font-medium text-white cursor-pointer"
             />
           </div>
+          */}
+
 
           <div className="mt-12">
             <button type="submit" onClick={() => navigate("/Home")} className="font-semibold rounded-xl text-white text-xl py-2 px-8 hover:bg-green-600 border-2 border-white transform hover:scale-105 transition duration-300 hover:border-green-600">

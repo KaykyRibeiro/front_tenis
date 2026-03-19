@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-
+import { homeService } from '../../service/homeService';
 import clsx from 'clsx';
-
 import UserCard from '../../components/cads/UserCard';
 import Sidebar from '../../components/navigation/Sidebar';
 import TempDatCard from '../../components/cads/TempDatCard';
@@ -24,62 +23,110 @@ export default function Home() {
     useEffect(() => {
         setTheme(isDark);
     }, [isDark]);
-    const novosAlunos = [
-        {
-            id: 1,
-            name: "Ana Clara Silva",
-            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-            whatsapp: "5511987654321",
-        },
-        {
-            id: 2,
-            name: "João Pedro Santos",
-            photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-            whatsapp: "5514998765432",
-        },
-        // ...
-    ];
+    // const novosAlunos = [
+    //     {
+    //         id: 1,
+    //         name: "Ana Clara Silva",
+    //         photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+    //         whatsapp: "5511987654321",
+    //     },
+    //     {
+    //         id: 2,
+    //         name: "João Pedro Santos",
+    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+    //         whatsapp: "5514998765432",
+    //     },
+    //     // ...
+    // ];
 
-    const aulasAgora = [
-        {
-            name: "Maria Fernanda Oliveira",
-            photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-            hours: "10:00 - 11:00",
-            whatsapp: "5511987654321",
-        },
-        {
-            name: "João Silva",
-            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-            hours: "11:00 - 12:00",
-            whatsapp: "5514998765432",
-        },
-        {
-            name: "Ana Clara Silva",
-            photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-            hours: "12:00 - 13:00",
-            whatsapp: "5511987654321",
-        },
-        {
-            name: "João Pedro Santos",
-            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-            hours: "13:00 - 14:00",
-            whatsapp: "5514998765432",
-        },
-        {
-            name: "Lucas Oliveira",
-            photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-            hours: "14:00 - 15:00",
-            whatsapp: "5511987654321",
-        },
-        {
-            name: "Maria Fernanda Oliveira",
-            photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-            hours: "15:00 - 16:00",
-            whatsapp: "5511987654321",
-        },
-        // ...
-    ];
+    // const aulasAgora = [
+    //     {
+    //         name: "Maria Fernanda Oliveira",
+    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+    //         hours: "10:00 - 11:00",
+    //         whatsapp: "5511987654321",
+    //     },
+    //     {
+    //         name: "João Silva",
+    //         photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+    //         hours: "11:00 - 12:00",
+    //         whatsapp: "5514998765432",
+    //     },
+    //     {
+    //         name: "Ana Clara Silva",
+    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+    //         hours: "12:00 - 13:00",
+    //         whatsapp: "5511987654321",
+    //     },
+    //     {
+    //         name: "João Pedro Santos",
+    //         photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+    //         hours: "13:00 - 14:00",
+    //         whatsapp: "5514998765432",
+    //     },
+    //     {
+    //         name: "Lucas Oliveira",
+    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+    //         hours: "14:00 - 15:00",
+    //         whatsapp: "5511987654321",
+    //     },
+    //     {
+    //         name: "Maria Fernanda Oliveira",
+    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+    //         hours: "15:00 - 16:00",
+    //         whatsapp: "5511987654321",
+    //     },
+    //     // ...
+    // ];
+    
+    const [novosAlunos, setNovosAlunos] = useState<any[]>([]);
+    const [aulasAgora, setAulasAgora] = useState<any[]>([]);
 
+    useEffect(() => {
+        async function fetchUsuarios() {
+            try {
+                const data = await homeService.getUsuarios();
+                console.log("DADOS DA API:", data);
+
+                const formatted = data.map((user: any) => ({
+                    id: user.usu_id,
+                    name: user.usu_nome,
+                    // photoUrl: user.usu_foto 
+                    photoUrl: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150",
+                    whatsapp: user.usu_telefone
+                }));
+
+                setNovosAlunos(formatted);
+            } catch (error) {
+                console.error("Erro ao buscar usuários:", error);
+            }
+        }
+
+        fetchUsuarios();
+    }, []);
+
+    useEffect(() => {
+        async function fetchAulasAgora() {
+            try {
+                const data = await homeService.getAulasAgora();
+                console.log("AULAS:", data);
+
+                const formatted = data.map((aula: any) => ({
+                    name: aula.usuario?.usu_nome,
+                    // photoUrl: aula.usuario?.usu_foto 
+                    photoUrl: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150",
+                    hours: aula.age_data_inicio,
+                    whatsapp: aula.usuario?.usu_telefone
+                }));
+
+                setAulasAgora(formatted);
+            } catch (error) {
+                console.error("Erro ao buscar aulas:", error);
+            }
+        }
+
+        fetchAulasAgora();
+    }, []);
 
     return (
         <div className={clsx('flex flex-1 flex-col h-screen bg-gray-smooth dark:bg-black')}>
@@ -87,7 +134,7 @@ export default function Home() {
             <div className='w-full h-2/12 flex flex-row items-center justify-between gap-4 p-4 pl-20'>
                 <button
                     onClick={toggleTheme}
-                    className='p-2   text-gray-800 dark:text-gray-200 focus:outline-none shadow-md rounded-full shadow-primary-color hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-black-smooth'
+                    className='p-2 text-gray-800 dark:text-gray-200 focus:outline-none shadow-md rounded-full shadow-primary-color hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-black-smooth'
                 >
                     {theme === "light" ? <Moon /> : <Sun />}
                 </button>

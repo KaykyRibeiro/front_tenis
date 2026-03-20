@@ -1,12 +1,28 @@
 import { Search, UserPlus } from 'lucide-react';
 import Sidebar from '../../components/navigation/Sidebar';
 import clsx from 'clsx';
+import TabsProfessores from '../../components/Tabs/TabsProfessores';
 
 export default function Professores() {
     const professores = [
-        { id: 1, nome: 'Professor A', disciplina: 'Matemática' },
-        { id: 2, nome: 'Professor B', disciplina: 'Português' },
-        { id: 3, nome: 'Professor C', disciplina: 'Ciências' },
+        { 
+            id: 1, 
+            name: 'Professor A',
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Em Aula',
+            whatsapp: "5511987654321", 
+        },
+        { 
+            id: 2, 
+            name: 'Professor B', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Ausente',
+            whatsapp: "5511987654321", 
+        },
+        { 
+            id: 3, 
+            name: 'Professor C', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Pausa', 
+            whatsapp: "5511987654321",
+        },
     ];
 
     const handleAdicionarProfessor = () => {
@@ -15,6 +31,11 @@ export default function Professores() {
     const handlePesquisar = () => {
         // Lógica para pesquisar professores
     }
+
+    const handleFiltrar = () => {
+        // Lógica para filtrar professores
+    }
+
 
     const totalProfessores = professores.length;
     return (
@@ -54,7 +75,9 @@ export default function Professores() {
                                 <select 
                                     className='bg-gray-300 dark:bg-zinc-800 text-black-smooth dark:text-white rounded-sm px-4 py-2 focus:outline-none'
                                     name="disciplina" 
-                                    id="disciplina">
+                                    id="disciplina"
+                                    onChange={handleFiltrar}
+                                >
                                     <option value="">Todos</option>
                                     <option value="matematica">Matemática</option>
                                     <option value="portugues">Português</option>
@@ -65,7 +88,7 @@ export default function Professores() {
                         </div>
 
                         <div className='w-full mt-4'>
-                            
+                            <TabsProfessores professores={professores} />
                         </div>
                     </div>
                     <div>

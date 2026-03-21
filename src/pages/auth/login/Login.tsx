@@ -2,24 +2,30 @@
 //import Button from "../../../components/Buttons/button";
 /*import { useState } from "react";
 import { useNavigate } from "react-router-dom"
-import { VerifyLogin } from "../../../service/authService"
+// import { VerifyLogin } from "../../../service/authService"
 import { useSearchParams } from "react-router-dom";*/
 
 import z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { VerifyLogin } from "../../../service/authService"
+import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
 
 const loginSchema = z.object({
-    email: z.string().nonempty("O email é obrigatório").email("Formato de email inválido"),
-    senha: z.string().nonempty("A senha é obrigatória"),
-  })
+  email: z.string().nonempty("O email é obrigatório").email("Formato de email inválido"),
+  senha: z.string().nonempty("A senha é obrigatória"),
+})
 
-  type LoginFormData = z.infer<typeof loginSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 export default function Login() {
   //const navigate = useNavigate()
   //const [form, setForm] = useState({ email: "", senha: "", });
   /*const [searchParams] = useSearchParams();
   const redirect = searchParams.get("redirect");*/
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -29,10 +35,26 @@ export default function Login() {
     }
   });
 
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const response = await VerifyLogin(data.email, data.senha);
 
-  
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
+      localStorage.setItem("token", response.data.access_token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+
+      if (redirect) {
+        navigate(redirect);
+      } else {
+        navigate("/home");
+      }
+
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        console.log("Email ou senha inválidos");
+      } else {
+        console.log("Erro ao fazer login. Tente novamente.");
+      }
+    }
   }
 
 
@@ -66,7 +88,7 @@ export default function Login() {
           className=" flex flex-col justify-center items-center ">
 
           <div className="mt-5 md:mt-10 flex flex-col">
-            <input 
+            <input
               type="email"
               placeholder="Insira seu Email"
               //value={form.email}

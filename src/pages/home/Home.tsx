@@ -23,62 +23,7 @@ export default function Home() {
     useEffect(() => {
         setTheme(isDark);
     }, [isDark]);
-    // const novosAlunos = [
-    //     {
-    //         id: 1,
-    //         name: "Ana Clara Silva",
-    //         photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-    //         whatsapp: "5511987654321",
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "João Pedro Santos",
-    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    //         whatsapp: "5514998765432",
-    //     },
-    //     // ...
-    // ];
 
-    // const aulasAgora = [
-    //     {
-    //         name: "Maria Fernanda Oliveira",
-    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    //         hours: "10:00 - 11:00",
-    //         whatsapp: "5511987654321",
-    //     },
-    //     {
-    //         name: "João Silva",
-    //         photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-    //         hours: "11:00 - 12:00",
-    //         whatsapp: "5514998765432",
-    //     },
-    //     {
-    //         name: "Ana Clara Silva",
-    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    //         hours: "12:00 - 13:00",
-    //         whatsapp: "5511987654321",
-    //     },
-    //     {
-    //         name: "João Pedro Santos",
-    //         photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-    //         hours: "13:00 - 14:00",
-    //         whatsapp: "5514998765432",
-    //     },
-    //     {
-    //         name: "Lucas Oliveira",
-    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    //         hours: "14:00 - 15:00",
-    //         whatsapp: "5511987654321",
-    //     },
-    //     {
-    //         name: "Maria Fernanda Oliveira",
-    //         photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    //         hours: "15:00 - 16:00",
-    //         whatsapp: "5511987654321",
-    //     },
-    //     // ...
-    // ];
-    
     const [novosAlunos, setNovosAlunos] = useState<any[]>([]);
     const [aulasAgora, setAulasAgora] = useState<any[]>([]);
 

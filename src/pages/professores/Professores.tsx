@@ -2,8 +2,12 @@ import { Search, UserPlus } from 'lucide-react';
 import Sidebar from '../../components/navigation/Sidebar';
 import clsx from 'clsx';
 import TabsProfessores from '../../components/Tabs/TabsProfessores';
+import CardPerfil from '../../components/cads/CardPerfil';
+
+import { useNavigate } from 'react-router-dom';
 
 export default function Professores() {
+    const navigate = useNavigate();
     const professores = [
         { 
             id: 1, 
@@ -23,10 +27,59 @@ export default function Professores() {
             photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Pausa', 
             whatsapp: "5511987654321",
         },
+        { 
+            id: 4, 
+            name: 'Professor D', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Em Aula', 
+            whatsapp: "5511987654321",
+        },
+        { 
+            id: 5, 
+            name: 'Professor E', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Ausente', 
+            whatsapp: "5511987654321",
+        },
+        { 
+            id: 6, 
+            name: 'Professor F', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Pausa', 
+            whatsapp: "5511987654321",
+        },
+        { 
+            id: 7, 
+            name: 'Professor G', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Em Aula', 
+            whatsapp: "5511987654321",
+        },
+        { 
+            id: 8, 
+            name: 'Professor H', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Ausente', 
+            whatsapp: "5511987654321",
+        },
+        { 
+            id: 9, 
+            name: 'Professor I', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Pausa', 
+            whatsapp: "5511987654321",
+        },
+        { 
+            id: 10, 
+            name: 'Professor J', 
+            photoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150", status: 'Em Aula', 
+            whatsapp: "5511987654321",
+        },
     ];
 
+    const perfilProfessor = {
+        nome: "Professor A",
+        status: "Em Aula",
+        fotoUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
+        aulas: ["10:00", "11:00", "13:00", "14:00"],
+        disponibilidade: ["17:00", "18:00", "19:00"],
+    };
     const handleAdicionarProfessor = () => {
-        // Lógica para adicionar um novo professor
+        navigate('/professores/cadastro');
     }
     const handlePesquisar = () => {
         // Lógica para pesquisar professores
@@ -91,8 +144,8 @@ export default function Professores() {
                             <TabsProfessores professores={professores} />
                         </div>
                     </div>
-                    <div>
-
+                    <div className='flex justify-center'>
+                        <CardPerfil {...perfilProfessor} />
                     </div>
                 </div>
             </div>

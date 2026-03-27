@@ -30,7 +30,7 @@ export default function Home() {
     useEffect(() => {
         async function fetchUsuarios() {
             try {
-                const data = await homeService.getUsuarios();
+                const data = await homeService.getAlunos();
                 console.log("DADOS DA API:", data);
 
                 const formatted = data.map((user: any) => ({
@@ -53,14 +53,14 @@ export default function Home() {
     useEffect(() => {
         async function fetchAulasAgora() {
             try {
-                const data = await homeService.getAulasAgora();
+                const data = await homeService.getAulasHoje();
                 console.log("AULAS:", data);
 
                 const formatted = data.map((aula: any) => ({
                     name: aula.usuario?.usu_nome,
                     // photoUrl: aula.usuario?.usu_foto 
                     photoUrl: "https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=150",
-                    hours: aula.age_data_inicio,
+                    // hours: aula.age_data_inicio,
                     whatsapp: aula.usuario?.usu_telefone
                 }));
 

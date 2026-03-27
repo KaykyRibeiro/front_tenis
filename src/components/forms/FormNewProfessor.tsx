@@ -2,7 +2,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { set, z } from "zod";
+import { z } from "zod";
+import { usuarioService } from "../../service/usuarioService";
 
 const professorSchema = z.object({
     nome: z.string().min(2, { message: "O nome deve ter pelo menos 2 caracteres" }).max(100).nonempty("O nome é obrigatório"),
@@ -39,9 +40,28 @@ export default function FormsNewProfessor() {
         }
     });
 
-    const onSubmit = (data: ProfessorFormData) => {
-        console.log("Dados do formulário:", data);
+    const onSubmit = async (data: ProfessorFormData) => {
+        try {
+            const payload = {
+                usu_nome: data.nome,
+                usu_email: data.email,
+                usu_telefone: data.telefone,
+                usu_senhaHash: data.senha,
+                usu_status: "ATIVO",
+                id_tipo_usuario: 5,
+            };
+
+            await usuarioService.createProfessor(payload);
+
+            console.log("Professor cadastrado com sucesso!");
+            navigate("/professores");
+
+        } catch (error) {
+            console.error(error);
+            setErro("Erro ao cadastrar professor");
+        }
     };
+
     return (
         <div className="bg-white/60 backdrop-blur-sm p-10 rounded-2xl shadow-md w-full max-w-md">
             <h1 className="text-2xl font-light mb-4 text-center">Cadastro de Professor</h1>

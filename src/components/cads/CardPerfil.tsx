@@ -8,12 +8,25 @@ type PerfilProps = {
   disponibilidade: string[];
 };
 
+const getStatusStyle = (status?: string) => {
+  switch (status) {
+    case "ATIVO":
+      return "bg-green-500 text-white";
+    case "INATIVO":
+      return "bg-yellow-500 text-white";
+    case "BLOQUEADO":
+      return "bg-red-500 text-white";
+    default:
+      return "bg-gray-400 text-white";
+  }
+};
+
 export default function CardPerfil({ nome, fotoUrl, status, aulas, disponibilidade }: PerfilProps) {
   return (
     <div className="flex flex-col items-center p-5 bg-white dark:bg-black-smooth w-8/12  rounded-lg shadow-md">
       <div className="w-full flex justify-between items-center">
         {status && (
-          <span className="bg-green-500 text-white dark:text-black p-2 rounded-xl mt-2">
+          <span className={`${getStatusStyle(status)} p-2 rounded-xl mt-2`}>
             {status}
           </span>
         )}

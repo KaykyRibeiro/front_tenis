@@ -74,38 +74,65 @@ export default function Home() {
     }, []);
 
     return (
-        <div className={clsx('flex flex-1 flex-col h-screen bg-gray-smooth dark:bg-black')}>
-
-            <div className='w-full h-2/12 flex flex-row items-center justify-between gap-4 p-4 pl-20'>
-                <button
-                    onClick={toggleTheme}
-                    className='p-2 text-gray-800 dark:text-gray-200 focus:outline-none shadow-md rounded-full shadow-primary-color hover:bg-gray-100 dark:hover:bg-gray-700 dark:bg-black-smooth'
-                >
-                    {theme === "light" ? <Moon /> : <Sun />}
-                </button>
-                <div className='flex flex-row items-center justify-end gap-4 p-4 h-12/12'>
-                    <Bell
-                        className='text-black dark:text-gray-200 w-8 h-8 cursor-pointer'
-                    />
-                    <div className='border border-gray-400 h-8/12' />
-                    <UserCard />
-                </div>
-
-
-            </div>
-            <div className='w-full h-10/12 flex flex-row justify-start gap-4 '>
-                <div className='flex flex-col justify-around  w-6/12 h-10/12 gap-4 ml-20 '>
-                    <TempDatCard />
-                    <div className='h-9/12'>
-                        <h2 className='text-xl font-semibold text-gray-800 dark:text-gray-200 '>Aulas Agora</h2>
-                        <TabsAulasAgora users={aulasAgora} />
+        <div className={clsx('min-h-screen bg-gray-smooth dark:bg-black-smooth font-sans text-gray-900 dark:text-gray-100 flex overflow-hidden')}>
+            
+            
+            <div className="flex-1 ml-16 flex flex-col h-screen overflow-hidden transition-all duration-300">
+                {/* Header */}
+                <header className='w-full flex items-center justify-between px-6 lg:px-10 py-4 bg-white/60 dark:bg-black-smooth backdrop-blur-xl border-b border-gray-200/50 dark:border-zinc-800/50'>
+                    <div className="flex items-center gap-4">
+                        <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 tracking-tight">Visão Geral</h1>
                     </div>
-                </div>
-                <div className='flex justify-end items-start w-6/12 pr-5'>
-                    <TabsNewAlunos users={novosAlunos} />
-                </div>
-            </div>
+                    <div className='flex flex-row items-center justify-end gap-3 sm:gap-6'>
+                        <button
+                            onClick={toggleTheme}
+                            className='p-2.5 text-gray-600 dark:text-gray-300 focus:outline-none rounded-full bg-white dark:bg-zinc-800 shadow-sm border border-gray-100 dark:border-zinc-700 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-all active:scale-95'
+                            title="Alternar tema"
+                        >
+                            {theme === "light" ? <Moon size={20} strokeWidth={1.5} /> : <Sun size={20} strokeWidth={1.5} />}
+                        </button>
+                        <button className="relative p-2.5 text-gray-600 dark:text-gray-300 rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-all active:scale-95">
+                            <Bell size={22} className="cursor-pointer" strokeWidth={1.5} />
+                            <span className="absolute top-2.5 right-3 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-zinc-900"></span>
+                        </button>
+                        <div className='h-8 w-px bg-gray-200 dark:bg-zinc-800 hidden sm:block' />
+                        <UserCard />
+                    </div>
+                </header>
 
+                {/* Content */}
+                <main className='flex-1 overflow-y-auto w-full p-6 lg:p-10'>
+                    <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 2xl:gap-12 max-w-[1600px] mx-auto h-full min-h-[600px]">
+                        
+                        {/* Left Column */}
+                        <div className='xl:col-span-5 2xl:col-span-5 flex flex-col gap-8 h-full'>
+                            <TempDatCard />
+                            
+                            <div className='flex flex-col flex-1 min-h-0'>
+                                <div className="flex items-center justify-between mb-4 px-1">
+                                    <h2 className='text-xl font-semibold text-gray-800 dark:text-gray-100 tracking-tight'>Aulas Hoje</h2>
+                                    <span className="text-xs font-semibold text-primary-color bg-primary-color/10 px-3 py-1 rounded-full uppercase tracking-wider">{aulasAgora.length} aulas</span>
+                                </div>
+                                <div className="flex-1">
+                                     <TabsAulasAgora users={aulasAgora} />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Column */}
+                        <div className='xl:col-span-7 2xl:col-span-7 flex flex-col h-full'>
+                            <div className="flex items-center justify-between mb-4 px-1">
+                                <h2 className='text-xl font-semibold text-gray-800 dark:text-gray-100 tracking-tight'>Novos Alunos</h2>
+                                <span className="text-xs font-semibold text-emerald-600 bg-emerald-500/10 px-3 py-1 rounded-full uppercase tracking-wider">{novosAlunos.length} registros</span>
+                            </div>
+                            <div className="flex-1 border border-transparent">
+                                <TabsNewAlunos users={novosAlunos} />
+                            </div>
+                        </div>
+
+                    </div>
+                </main>
+            </div>
             <Sidebar page="Home" />
         </div>
     );

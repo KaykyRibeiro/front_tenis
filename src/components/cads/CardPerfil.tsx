@@ -11,64 +11,69 @@ type PerfilProps = {
 const getStatusStyle = (status?: string) => {
   switch (status) {
     case "ATIVO":
-      return "bg-green-500 text-white";
+      return "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-500";
     case "INATIVO":
-      return "bg-yellow-500 text-white";
+      return "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/10 dark:text-yellow-500";
     case "BLOQUEADO":
-      return "bg-red-500 text-white";
+      return "bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-500";
     default:
-      return "bg-gray-400 text-white";
+      return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
   }
 };
 
 export default function CardPerfil({ nome, fotoUrl, status, aulas, disponibilidade }: PerfilProps) {
   return (
-    <div className="flex flex-col items-center p-5 bg-white dark:bg-black-smooth w-8/12  rounded-lg shadow-md">
-      <div className="w-full flex justify-between items-center">
-        {status && (
-          <span className={`${getStatusStyle(status)} p-2 rounded-xl mt-2`}>
-            {status}
-          </span>
-        )}
-        <button className="flex text-primary-color dark:text-green-500 items-center gap-2 px-4 py-2 border border-primary-color rounded-2xl hover:bg-primary-color hover:text-white transition-colors duration-300">
-          <SquarePen />
-          Editar
-        </button>
+    <div className="flex flex-col items-center w-full bg-white dark:bg-zinc-900/60 backdrop-blur-md shadow-xl shadow-black/5 border border-gray-100 dark:border-zinc-800 rounded-3xl overflow-hidden group transition-all duration-300">
+      {/* Cobre decorativa no topo */}
+      <div className="h-28 w-full bg-linear-to-r from-primary-color/30 to-primary-color/5 dark:from-primary-color/20 dark:to-transparent relative">
+         <div className="absolute top-4 right-4 flex gap-2">
+            <button className="flex text-gray-700 dark:text-gray-200 items-center gap-2 px-4 py-2 bg-white/80 dark:bg-black/40 backdrop-blur-md rounded-xl hover:bg-white dark:hover:bg-black/60 transition-colors duration-300 shadow-sm text-sm font-semibold">
+              <SquarePen size={16} />
+              Editar
+            </button>
+         </div>
       </div>
-      <img src={fotoUrl} alt={nome} className="w-32 h-32 rounded-full object-cover mt-10" />
-      <p className="font-light text-5xl text-black-smooth dark:text-white">{nome}</p>
+      
+      <div className="flex flex-col items-center px-6 pb-8 w-full -mt-14 relative z-10">
+        <div className="relative">
+          <img src={fotoUrl} alt={nome} className="w-28 h-28 rounded-full object-cover ring-4 ring-white dark:ring-zinc-900 bg-white dark:bg-zinc-800 shadow-md" />
+          {status && (
+            <span className={`absolute bottom-1 right-0 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full ring-2 ring-white dark:ring-zinc-900 shadow-sm ${getStatusStyle(status)}`}>
+              {status}
+            </span>
+          )}
+        </div>
+        
+        <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mt-4 tracking-tight text-center">{nome}</h2>
+        <p className="text-sm font-medium text-gray-500 dark:text-gray-400 mt-1 uppercase tracking-wider">Professor(a)</p>
 
-      <div className="w-full mt-4 h-0.5 bg-gray-smooth dark:bg-black/30" />
-      <div className="w-full mt-4 flex flex-col items-start">
-        <h2 className="text-xl font-semibold text-black-smooth dark:text-white">Aulas</h2>
-        <div className="flex justify-start w-full mt-2">
-          <ul className="flex flex-row justify-around gap-4">
+        <div className="w-full mt-8 h-px bg-gray-100 dark:bg-zinc-800/80" />
+        
+        <div className="w-full mt-6 flex flex-col">
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-gray-400 dark:text-gray-500 mb-3">Aulas Atuais</h3>
+          <ul className="flex flex-wrap gap-2">
             {aulas && aulas.length > 0 ? (
               aulas.map((aula, index) => (
-                <li className="border-2 border-primary-color text-primary-color dark:text-green-500 p-2 rounded-xl" key={index}>{aula}</li>
+                 <li className="bg-primary-color/5 dark:bg-primary-color/10 border border-primary-color/20 text-primary-color dark:text-green-400 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors hover:bg-primary-color/10 dark:hover:bg-primary-color/20" key={index}>{aula}</li>
               ))
             ) : (
-              <li className="w-full items-center text-gray-500">Sem aulas registradas</li>
+                <li className="text-sm font-medium text-gray-500 dark:text-gray-400 italic">Sem aulas no momento.</li>
             )}
           </ul>
         </div>
-
-      </div>
-      <div className="w-full mt-10 flex flex-col items-start">
-        <h2 className="text-xl font-semibold text-black-smooth dark:text-white">Disponibilidade</h2>
-        <div className="flex justify-start w-full mt-4">
-          <ul className="flex flex-row justify-around gap-4">
-
+        
+        <div className="w-full mt-6 flex flex-col">
+          <h3 className="text-xs uppercase tracking-wider font-semibold text-gray-400 dark:text-gray-500 mb-3">Disponibilidade</h3>
+          <ul className="flex flex-wrap gap-2">
             {disponibilidade && disponibilidade.length > 0 ? (
               disponibilidade.map((item, index) => (
-                <li className="border-2 border-primary-color text-primary-color dark:text-green-500 p-2 rounded-xl" key={index}>{item}</li>
+                 <li className="bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/20 text-blue-700 dark:text-blue-400 text-sm font-medium px-3 py-1.5 rounded-lg transition-colors hover:bg-blue-100 dark:hover:bg-blue-500/20" key={index}>{item}</li>
               ))
             ) : (
-              <li className="w-full items-center text-gray-500">Sem disponibilidade registrada</li>
+                 <li className="text-sm font-medium text-gray-500 dark:text-gray-400 italic">Horários não informados.</li>
             )}
           </ul>
         </div>
-
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ const Dashboard = lazy(() => import("./pages/dashboards/Dashboard"));
 const Aulas = lazy(() => import("./pages/aulas/Aulas"));
 const Quadras = lazy(() => import("./pages/quadras/Quadras"));
 const Alunos = lazy(() => import("./pages/alunos/Alunos"));
+const AluCadastro = lazy(() => import("./pages/alunos/AluCadastro"));
 const Professores = lazy(() => import("./pages/professores/Professores"));
 const ProCadastro = lazy(() => import("./pages/professores/ProCadastro"));
 const Login = lazy(() => import("./pages/auth/login/Login"));
@@ -37,6 +38,7 @@ export default function AppRoutes() {
                     <Route path="/aulas" element={<Aulas />} />
                     <Route path="/quadras" element={<Quadras />} />
                     <Route path="/alunos" element={<Alunos />} />
+                    <Route path="/alunos/cadastro" element={<AluCadastro />} />
                     <Route path="/professores" element={<Professores />} />
                     <Route path="/professores/cadastro" element={<ProCadastro />} />
                     <Route path="/login" element={<Login />} />

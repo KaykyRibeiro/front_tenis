@@ -1,7 +1,6 @@
-import { Search, Filter, MoreVertical, Edit, Trash2, Eye, User, Mail, Phone, Calendar, SearchX } from "lucide-react";
+import { Search, Filter, Edit, Trash2, Eye, User, Mail, Phone, Calendar, SearchX } from "lucide-react";
 import { clsx } from "clsx";
 import { useState } from 'react';
-
 
 interface Aluno {
     id: string;
@@ -14,9 +13,7 @@ interface Aluno {
     avatar?: string;
 }
 
-
-
-export default function TabsAlunos({ mockAlunos }: { mockAlunos: Aluno[] }) {
+export default function TabsAlunos({ mockAlunos, receberAcao }: { mockAlunos: Aluno[], receberAcao: (acao: string, id: string) => void }) {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterNivel, setFilterNivel] = useState("Todos");
 
@@ -38,6 +35,10 @@ export default function TabsAlunos({ mockAlunos }: { mockAlunos: Aluno[] }) {
         if (nivel === "Intermediário") return "bg-amber-100 text-amber-700 dark:bg-amber-500/20 dark:text-amber-400";
         return "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-400";
     };
+
+    const enviarAcao = (acao: string, id: string) => {
+        receberAcao(acao, id);
+    }
     return (
         <div>
             {/* Filters and Search Bar */}
@@ -85,7 +86,7 @@ export default function TabsAlunos({ mockAlunos }: { mockAlunos: Aluno[] }) {
                 <div className="overflow-x-auto overflow-y-auto h-[calc(80vh-250px)] w-full">
                     <table className="min-w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/50 dark:bg-black/20 border-b border-slate-200 dark:border-white/5">
+                            <tr className="bg-slate-50/50 dark:bg-black-smooth/50 border-b border-slate-200 dark:border-white/5">
                                 <th className="py-5 px-6 font-semibold text-slate-500 dark:text-slate-400 text-sm">Aluno</th>
                                 <th className="py-5 px-6 font-semibold text-slate-500 dark:text-slate-400 text-sm">Contato</th>
                                 <th className="py-5 px-6 font-semibold text-slate-500 dark:text-slate-400 text-sm">Nível</th>
@@ -142,17 +143,23 @@ export default function TabsAlunos({ mockAlunos }: { mockAlunos: Aluno[] }) {
                                         </td>
                                         <td className="py-4 px-6 text-right">
                                             <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button title="Ver Perfil" className="p-2 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-lg transition-colors">
+                                                <button 
+                                                    title="Ver Perfil" 
+                                                    onClick={() => enviarAcao("ver", aluno.id)}
+                                                    className="p-2 text-slate-400 hover:text-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-500/10 rounded-lg transition-colors">
                                                     <Eye className="w-4 h-4" />
                                                 </button>
-                                                <button title="Editar" className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-lg transition-colors">
+                                                <button 
+                                                    title="Editar" 
+                                                    onClick={() => enviarAcao("editar", aluno.id)}
+                                                    className="p-2 text-slate-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-500/10 rounded-lg transition-colors">
                                                     <Edit className="w-4 h-4" />
                                                 </button>
-                                                <button title="Excluir" className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
+                                                <button 
+                                                    title="Excluir" 
+                                                    onClick={() => enviarAcao("excluir", aluno.id)}
+                                                    className="p-2 text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg transition-colors">
                                                     <Trash2 className="w-4 h-4" />
-                                                </button>
-                                                <button className="p-2 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 rounded-lg transition-colors ml-1">
-                                                    <MoreVertical className="w-4 h-4" />
                                                 </button>
                                             </div>
                                         </td>

@@ -2,13 +2,124 @@ import Sidebar from "../../components/navigation/Sidebar";
 import HeaDashboard from "../../components/header/HeaDashboard";
 import clsx from "clsx";
 import { Users, GraduationCap, SquareCenterlineDashedHorizontal, Calendar, TrendingUp, TrendingDown, Clock } from "lucide-react";
+import { dashboardService } from "../../service/dashboardService";
+import { useEffect, useState } from "react";
+import { aulaService } from "../../service/aulaService";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Dashboard() {
+  const [totalAlunos, setTotalAlunos] = useState(0);
+  const [totalProfessores, setTotalProfessores] = useState(0);
+  const [aulas, setAulas] = useState<any[]>([]);
+  const [totalAulasHoje, setTotalAulasHoje] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchProfessores() {
+      try {
+        const data = await dashboardService.getProfessores();
+
+        const ativos = data.filter(
+          (prof: any) => prof.usu_status === "ATIVO"
+        );
+
+        setTotalProfessores(ativos.length);
+
+      } catch (error) {
+        console.error("Erro ao buscar total de professores:", error);
+      }
+    }
+
+    fetchProfessores();
+  }, []);
+
+  useEffect(() => {
+    async function fetchDashboard() {
+      try {
+        const data = await dashboardService.getAlunos();
+
+        setTotalAlunos(data.length);
+
+      } catch (error) {
+        console.error("Erro ao buscar total de alunos:", error);
+      }
+    }
+
+    fetchDashboard();
+  }, []);
+
+  useEffect(() => {
+    async function fetchAulas() {
+      try {
+        const data = await aulaService.getAulas();
+
+        const hoje = new Date();
+
+        const aulasHoje = data
+          .filter((aula: any) => aula.age_status === "AGENDADO")
+
+          .filter((aula: any) => {
+            const dataAula = new Date(aula.age_data_inicio);
+
+            return (
+              dataAula.getDate() === hoje.getDate() &&
+              dataAula.getMonth() === hoje.getMonth() &&
+              dataAula.getFullYear() === hoje.getFullYear()
+            );
+          })
+
+          .sort(
+            (a: any, b: any) =>
+              new Date(a.age_data_inicio).getTime() -
+              new Date(b.age_data_inicio).getTime()
+          )
+
+          .slice(0, 3);
+
+        setAulas(aulasHoje);
+
+      } catch (error) {
+        console.error("Erro ao buscar aulas:", error);
+      }
+    }
+
+    fetchAulas();
+  }, []);
+
+  useEffect(() => {
+  async function fetchAulas() {
+      try {
+        const data = await aulaService.getAulas();
+
+        const hoje = new Date();
+
+        const aulasHoje = data.filter((aula: any) => {
+          const dataAula = new Date(aula.age_data_inicio);
+
+          return (
+            aula.age_status === "AGENDADO" &&
+            dataAula.getDate() === hoje.getDate() &&
+            dataAula.getMonth() === hoje.getMonth() &&
+            dataAula.getFullYear() === hoje.getFullYear()
+          );
+        });
+
+        setTotalAulasHoje(aulasHoje.length);
+
+      } catch (error) {
+        console.error("Erro ao buscar aulas:", error);
+      }
+    }
+
+    fetchAulas();
+  }, []);
+
   const kpis = [
-    { title: "Total de Alunos", value: "320", trend: "+12%", up: true, icon: GraduationCap, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30" },
-    { title: "Professores Ativos", value: "14", trend: "+2", up: true, icon: Users, color: "text-purple-600", bg: "bg-purple-100 dark:bg-purple-900/30" },
+    { title: "Total de Alunos", value: totalAlunos.toString(), trend: "+12%", up: true, icon: GraduationCap, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30" },
+    { title: "Professores Ativos", value: totalProfessores.toString(), trend: "+2", up: true, icon: Users, color: "text-purple-600", bg: "bg-purple-100 dark:bg-purple-900/30" },
     { title: "Quadras em Uso", value: "7/12", trend: "58%", up: true, icon: SquareCenterlineDashedHorizontal, color: "text-orange-600", bg: "bg-orange-100 dark:bg-orange-900/30" },
-    { title: "Aulas Agendadas Hoje", value: "48", trend: "-5%", up: false, icon: Calendar, color: "text-green-600", bg: "bg-green-100 dark:bg-green-900/30" },
+    { title: "Aulas Agendadas Hoje", value: totalAulasHoje.toString(), trend: "-5%", up: false, icon: Calendar, color: "text-green-600", bg: "bg-green-100 dark:bg-green-900/30" },
   ];
 
   const quadrasOccupation = [
@@ -76,23 +187,51 @@ export default function Dashboard() {
               <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">Próximas Aulas</h3>
-                  <button className="text-sm font-semibold text-primary-color hover:underline">Ver todas</button>
+                  <button className="text-sm font-semibold text-primary-color hover:underline" onClick={() => navigate("/aulas")}>
+                    Ver todas
+                  </button>
                 </div>
                 <div className="flex flex-col gap-4">
-                  {[1, 2, 3].map(item => (
-                    <div key={item} className="flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-gray-100 dark:hover:border-zinc-700 transition-colors">
-                       <div className="w-12 h-12 rounded-full border-2 border-white dark:border-zinc-800 overflow-hidden shadow-sm">
-                          <img src={`https://ui-avatars.com/api/?name=Aluno+${item}&background=random&color=fff`} className="w-full h-full object-cover" />
-                       </div>
-                       <div className="flex flex-col flex-1">
-                          <span className="text-sm font-bold text-gray-800 dark:text-gray-200">Aluno {item}</span>
+                  {aulas.length > 0 ? (
+                    aulas.map((aula, index) => (
+                      <div
+                        key={index}
+                        className="flex gap-4 items-center p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800/50 border border-transparent hover:border-gray-100 dark:hover:border-zinc-700 transition-colors"
+                      >
+                        <div className="w-12 h-12 rounded-full border-2 border-white dark:border-zinc-800 overflow-hidden shadow-sm">
+                          <img
+                            src={`https://ui-avatars.com/api/?name=${aula.usuario?.usu_nome}&background=random&color=fff`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+
+                        <div className="flex flex-col flex-1">
+                          <span className="text-sm font-bold text-gray-800 dark:text-gray-200">
+                            {aula.usuario?.usu_nome || "Aluno Desconecido"}
+                          </span>
+
                           <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">
-                             <Clock className="w-3.5 h-3.5" /> <span>14:00 - Quadra {item}</span>
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>
+                              {new Date(aula.age_data_inicio).toLocaleTimeString("pt-BR", {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                              })} - Quadra {aula.id_quadra}
+                            </span>
                           </div>
-                       </div>
-                       <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 rounded-md border border-yellow-200 dark:border-yellow-900/50">Agendada</span>
+                        </div>
+
+                        <span className="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400 rounded-md border border-yellow-200 dark:border-yellow-900/50">
+                          {aula.age_status}
+                        </span>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-10 text-gray-500 dark:text-gray-400">
+                      <Calendar className="w-10 h-10 mb-3 opacity-50" />
+                      <p className="text-sm font-medium">Sem aulas agendadas</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </div>

@@ -2,61 +2,117 @@ import Sidebar from "../../components/navigation/Sidebar";
 import HeaQuadras from "../../components/header/HeaQuadras";
 import clsx from "clsx";
 import CardQuadra, { type QuadraProps } from "../../components/cads/CardQuadra";
-
-const mockQuadras: QuadraProps[] = [
-  {
-    nome: "Quadra 1 - Saibro",
-    foto: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=2070&auto=format&fit=crop",
-    aulaEmAndamento: {
-      professor: {
-        nome: "Carlos Silva",
-        foto: "https://ui-avatars.com/api/?name=Carlos+Silva&background=22c55e&color=fff",
-      },
-      aluno: {
-        nome: "Ana Souza",
-        foto: "https://ui-avatars.com/api/?name=Ana+Souza&background=3b82f6&color=fff",
-      },
-    },
-    horariosHoje: [
-      { hora: "08:00", disponivel: false, detalhe: "Aula Prof. Carlos" },
-      { hora: "09:00", disponivel: false, detalhe: "Aula Prof. Carlos" },
-      { hora: "10:00", disponivel: true },
-      { hora: "11:00", disponivel: false, detalhe: "Locação" },
-    ],
-  },
-  {
-    nome: "Quadra 2 - Rápida",
-    foto: "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?q=80&w=2072&auto=format&fit=crop",
-    horariosHoje: [
-      { hora: "08:00", disponivel: true },
-      { hora: "09:00", disponivel: false, detalhe: "Locação" },
-      { hora: "10:00", disponivel: true },
-      { hora: "11:00", disponivel: true },
-    ],
-  },
-  {
-    nome: "Quadra 3 - Coberta",
-    foto: "https://images.unsplash.com/photo-1542144582-1ba004ac6b53?q=80&w=1974&auto=format&fit=crop",
-    aulaEmAndamento: {
-      professor: {
-        nome: "Marcos Lima",
-        foto: "https://ui-avatars.com/api/?name=Marcos+Lima&background=22c55e&color=fff",
-      },
-      aluno: {
-        nome: "Roberto Alves",
-        foto: "https://ui-avatars.com/api/?name=Roberto+Alves&background=3b82f6&color=fff",
-      },
-    },
-    horariosHoje: [
-      { hora: "08:00", disponivel: false, detalhe: "Manutenção" },
-      { hora: "09:00", disponivel: false, detalhe: "Manutenção" },
-      { hora: "10:00", disponivel: false, detalhe: "Aula Prof. Marcos" },
-      { hora: "11:00", disponivel: true },
-    ],
-  },
-];
+import { useEffect, useState } from "react";
+import { quadraService } from "../../service/quadraService";
+import { aulaService } from "../../service/aulaService";
 
 export default function Quadras() {
+  const [quadras, setQuadras] = useState<QuadraProps[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const quadrasData = await quadraService.getQuadras();
+        const aulasData = await aulaService.getAulas();
+
+        const hoje = new Date();
+
+        const quadrasFormatadas = quadrasData.map((quadra: any) => {
+          // 🔎 filtra aulas dessa quadra hoje
+          const aulasHoje = aulasData.filter((a: any) => {
+            const d = new Date(a.age_data_inicio);
+
+            return (
+              a.id_quadra === quadra.qua_id &&
+              d.getDate() === hoje.getDate() &&
+              d.getMonth() === hoje.getMonth() &&
+              d.getFullYear() === hoje.getFullYear()
+            );
+          });
+
+          // ⏰ horários do dia
+          const horaInicio = 7;
+          const horaFim = 22;
+
+          const horariosHoje = Array.from(
+            { length: horaFim - horaInicio + 1 },
+            (_, i) => {
+              const hora = `${(horaInicio + i).toString().padStart(2, "0")}:00`;
+
+              const aula = aulasHoje.find((a: any) => {
+                const horaAula =
+                  new Date(a.age_data_inicio)
+                    .getHours()
+                    .toString()
+                    .padStart(2, "0") + ":00";
+
+                return horaAula === hora;
+              });
+
+              const horaNumero = horaInicio + i;
+              const horaAlmocoInicio = 12;
+              const horaAlmocoFim = 14;
+
+              const isAlmoco =
+                horaNumero >= horaAlmocoInicio && horaNumero < horaAlmocoFim;
+
+              return {
+                hora,
+                disponivel:
+                  !aula && !isAlmoco && quadra.qua_status !== "MANUTENCAO",
+
+                detalhe:
+                  quadra.qua_status === "MANUTENCAO"
+                    ? "Manutenção"
+                    : isAlmoco
+                      ? "Almoço"
+                      : aula
+                        ? `Aula ${aula.usuario?.usu_nome}`
+                        : undefined,
+              };
+            },
+          );
+
+          // 🟢 aula em andamento
+          const agora = new Date();
+
+          const aulaAtual = aulasHoje.find((a: any) => {
+            const inicio = new Date(a.age_data_inicio);
+            const fim = new Date(a.age_data_fim);
+
+            return agora >= inicio && agora <= fim;
+          });
+
+          return {
+            nome: quadra.qua_nome,
+            foto: "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6",
+
+            aulaEmAndamento: aulaAtual
+              ? {
+                  professor: {
+                    nome: "Professor", // depois você pode puxar do backend
+                    foto: "https://ui-avatars.com/api/?name=Professor",
+                  },
+                  aluno: {
+                    nome: aulaAtual.usuario?.usu_nome,
+                    foto: `https://ui-avatars.com/api/?name=${aulaAtual.usuario?.usu_nome}`,
+                  },
+                }
+              : undefined,
+
+            horariosHoje,
+          };
+        });
+
+        setQuadras(quadrasFormatadas);
+      } catch (err) {
+        console.error("Erro ao carregar quadras:", err);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return (
     <div
       className={clsx(
@@ -71,7 +127,7 @@ export default function Quadras() {
         <main className="flex-1 overflow-y-auto w-full p-6 lg:p-10">
           <div className="max-w-[1600px] mx-auto h-full flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mockQuadras.map((quadra, index) => (
+              {quadras.map((quadra, index) => (
                 <CardQuadra key={index} {...quadra} />
               ))}
             </div>

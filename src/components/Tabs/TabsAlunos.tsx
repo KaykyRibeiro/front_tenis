@@ -13,19 +13,34 @@ interface Aluno {
     avatar?: string;
 }
 
-export default function TabsAlunos({ mockAlunos, receberAcao }: { mockAlunos: Aluno[], receberAcao: (acao: string, id: string) => void }) {
+type Props = {
+    alunos: Aluno[];
+    receberAcao: (acao: string, id: string) => void;
+};
+
+
+
+export default function TabsAlunos({ alunos, receberAcao }: Props){
     const [searchTerm, setSearchTerm] = useState("");
     const [filterNivel, setFilterNivel] = useState("Todos");
 
-    const filteredAlunos = mockAlunos.filter((aluno) => {
-        const matchesSearch = aluno.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            aluno.email.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesNivel = filterNivel === "Todos" || aluno.nivel === filterNivel;
-        return matchesSearch && matchesNivel;
-    });
+    
+    const filteredAlunos = alunos.filter((aluno) => {
+    const nome = aluno.nome || "";
+    const email = aluno.email || "";
+
+    const matchesSearch =
+        nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        email.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesNivel =
+        filterNivel === "Todos" || aluno.nivel === filterNivel;
+
+    return matchesSearch && matchesNivel;
+});
 
     const getStatusStyles = (status: string) => {
-        return status === "Ativo"
+        return status === "ATIVO"
             ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/30"
             : "bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400 border-rose-200 dark:border-rose-500/30";
     };
@@ -112,7 +127,7 @@ export default function TabsAlunos({ mockAlunos, receberAcao }: { mockAlunos: Al
                                                         {aluno.nome}
                                                     </div>
                                                     <div className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-                                                        <User className="w-3 h-3" /> ID: #{aluno.id.padStart(4, '0')}
+                                                        <User className="w-3 h-3" /> ID: #{String(aluno.id).padStart(4, '0')}
                                                     </div>
                                                 </div>
                                             </div>
@@ -124,14 +139,14 @@ export default function TabsAlunos({ mockAlunos, receberAcao }: { mockAlunos: Al
                                             </div>
                                         </td>
                                         <td className="py-4 px-6">
-                                            <span className={clsx("px-3 py-1 rounded-full text-xs font-medium", getNivelStyles(aluno.nivel))}>
-                                                {aluno.nivel}
+                                            <span className={clsx("px-3 py-1 rounded-full text-xs font-medium", getNivelStyles(aluno.nivel) )}>
+                                                {aluno.nivel || "-"}
                                             </span>
                                         </td>
                                         <td className="py-4 px-6">
 
                                             <span className={clsx("flex items-center gap-2 text-xs font-medium rounded-2xl p-2", getStatusStyles(aluno.status))}>
-                                                <span className={clsx("w-2 h-2 rounded-full", aluno.status === "Ativo" ? "bg-emerald-500" : "bg-rose-500")} />
+                                                <span className={clsx("w-2 h-2 rounded-full", aluno.status?.toUpperCase() === "ATIVO" ? "bg-emerald-500" : "bg-rose-500")} />
                                                 {aluno.status}
                                             </span>
                                         </td>
@@ -184,7 +199,7 @@ export default function TabsAlunos({ mockAlunos, receberAcao }: { mockAlunos: Al
 
                 {/* Pagination placeholder */}
                 <div className="px-6 py-4 border-t border-slate-200 dark:border-white/5 flex items-center justify-between text-sm text-slate-500">
-                    <span>Mostrando {filteredAlunos.length} de {mockAlunos.length} alunos</span>
+                    <span>Mostrando {filteredAlunos.length} de {alunos.length} alunos</span>
                 </div>
             </div>
         </div>

@@ -96,24 +96,38 @@ export default function CardQuadra({
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            {horariosHoje.map((horario, index) => (
-              <div
-                key={index}
-                className={clsx(
-                  "px-3 py-2 rounded-lg text-xs font-medium border flex items-center justify-between",
-                  horario.disponivel
-                    ? "bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30 text-green-700 dark:text-green-400"
-                    : "bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 text-gray-500 dark:text-gray-400"
-                )}
-              >
-                <span>{horario.hora}</span>
-                <span className="truncate ml-2 max-w-[70px]">
-                  {horario.disponivel
-                    ? "Livre"
-                    : horario.detalhe || "Ocupado"}
-                </span>
-              </div>
-            ))}
+            {horariosHoje.map((horario, index) => {
+              const isAlmoco = horario.detalhe === "Almoço";
+
+              return (
+                <div
+                  key={index}
+                  className={clsx(
+                    "px-3 py-2 rounded-lg text-xs font-medium border flex items-center justify-between",
+
+                    isAlmoco &&
+                      "bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-900/30 text-red-700 dark:text-red-400",
+
+                    !isAlmoco &&
+                      horario.disponivel &&
+                      "bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-900/30 text-green-700 dark:text-green-400",
+
+                    !isAlmoco &&
+                      !horario.disponivel &&
+                      "bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 text-gray-500 dark:text-gray-400",
+                  )}
+                >
+                  <span>{horario.hora}</span>
+                  <span className="truncate ml-2 max-w-[70px]">
+                    {isAlmoco
+                      ? "Almoço"
+                      : horario.disponivel
+                        ? "Livre"
+                        : horario.detalhe || "Ocupado"}
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

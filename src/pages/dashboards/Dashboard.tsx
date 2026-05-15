@@ -118,16 +118,16 @@ export default function Dashboard() {
   const kpis = [
     { title: "Total de Alunos", value: totalAlunos.toString(), trend: "+12%", up: true, icon: GraduationCap, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30" },
     { title: "Professores Ativos", value: totalProfessores.toString(), trend: "+2", up: true, icon: Users, color: "text-purple-600", bg: "bg-purple-100 dark:bg-purple-900/30" },
-    { title: "Quadras em Uso", value: "7/12", trend: "58%", up: true, icon: SquareCenterlineDashedHorizontal, color: "text-orange-600", bg: "bg-orange-100 dark:bg-orange-900/30" },
+    //{ title: "Quadras em Uso", value: "7/12", trend: "58%", up: true, icon: SquareCenterlineDashedHorizontal, color: "text-orange-600", bg: "bg-orange-100 dark:bg-orange-900/30" },
     { title: "Aulas Agendadas Hoje", value: totalAulasHoje.toString(), trend: "-5%", up: false, icon: Calendar, color: "text-green-600", bg: "bg-green-100 dark:bg-green-900/30" },
   ];
 
-  const quadrasOccupation = [
+  {/*const quadrasOccupation = [
     { nome: "Quadra 1 - Saibro", perc: 85 },
     { nome: "Quadra 2 - Rápida", perc: 60 },
     { nome: "Quadra 3 - Coberta", perc: 95 },
     { nome: "Quadra 4 - Saibro", perc: 30 },
-  ];
+  ];*/}
 
   return (
     <div className={clsx("min-h-screen bg-gray-smooth dark:bg-black-smooth font-sans text-gray-900 dark:text-gray-100 flex overflow-hidden")}>
@@ -163,7 +163,7 @@ export default function Dashboard() {
             {/* Middle Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Occupation Chart */}
-              <div className="lg:col-span-2 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col">
+              {/* <div className="lg:col-span-2 bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col">
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-6">Taxa de Ocupação das Quadras (Hoje)</h3>
                 <div className="flex flex-col gap-5 flex-1 justify-center relative">
                   {quadrasOccupation.map((q, idx) => (
@@ -181,7 +181,7 @@ export default function Dashboard() {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               {/* Next Classes */}
               <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm flex flex-col">

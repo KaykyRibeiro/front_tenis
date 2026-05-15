@@ -4,6 +4,7 @@ import HeaAulas from "../../components/header/HeaAulas";
 import ModalAula from "../../components/aulas/ModalAula";
 import clsx from "clsx";
 import { aulaService } from "../../service/aulaService";
+import ModalNovaAula from "../../components/aulas/ModalNovaAula";
 
 export interface AulaProps {
   id: string;
@@ -212,11 +213,13 @@ export default function Aulas() {
     );
   };
 
+  const [isNovaAulaModalOpen, setIsNovaAulaModalOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gray-smooth dark:bg-black-smooth font-sans text-gray-900 dark:text-gray-100 flex overflow-hidden">
       <div className="flex-1 ml-16 flex flex-col h-screen overflow-hidden transition-all duration-300">
         <header className="flex flex-col w-full">
-          <HeaAulas />
+          <HeaAulas onOpenNovaAula={() => setIsNovaAulaModalOpen(true)} />
         </header>
 
         <main className="flex-1 overflow-y-auto w-full p-6 flex flex-col">
@@ -484,6 +487,10 @@ export default function Aulas() {
       <Sidebar page="Aulas" />
 
       <ModalAula aula={selectedAula} onClose={() => setSelectedAula(null)} />
+      <ModalNovaAula
+        isOpen={isNovaAulaModalOpen}
+        onClose={() => setIsNovaAulaModalOpen(false)}
+      />
     </div>
   );
 }
